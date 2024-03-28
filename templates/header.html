@@ -3,7 +3,7 @@
 	flex justify-between items-center
 	border-b-2 {{if .IsDarkmode}}border-gray-600{{else}}border-gray-300{{end}}">
 	<div class="flex flex-row justify-start items-center">
-		<img style="max-width: 56px;" class="w-12" src="{{.ServerURL}}/assets/la-logo.png" alt="la logo" >
+		<img style="max-width: 56px;" class="w-12" src="{{.IMG_logo}}" alt="la logo" >
 		<div class="flex flex-col">
 			<h1 class="text-md tracking-tight italic
 			text-gray-{{if .IsDarkmode}}300{{else}}800{{end}}
@@ -29,7 +29,7 @@
 	<div
 	class="mn:hidden lg:flex flex-row justify-evenly items-center space-x-3">
 		<button id="toggle-visualmode-btn" style="width: 40px; height: 40px">
-			<img style="width: 100%;" src="{{.ServerURL}}/assets/{{if .IsDarkmode}}moon{{else}}sun{{end}}.svg" alt="">
+			<img style="width: 100%;" src="{{if .IsDarkmode}}{{.IMG_moon}}{{else}}{{.IMG_sun}}{{end}}" alt="">
 		</button>
 		<button id="toggle-lang-btn" style="width: 40px; height: 40px" class="rounded-full">
 			<img style="width: 100%;" src="{{.ServerURL}}/assets/{{.Lang}}.png" alt="">
