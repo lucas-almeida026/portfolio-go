@@ -32,7 +32,7 @@
 			<img style="width: 100%;" src="{{if .IsDarkmode}}{{.IMG_moon}}{{else}}{{.IMG_sun}}{{end}}" alt="">
 		</button>
 		<button id="toggle-lang-btn" style="width: 40px; height: 40px" class="rounded-full">
-			<img style="width: 100%;" src="{{if .Lang eq "en"}}{{.IMG_en}}{{else}}{{.IMG_pt}}{{end}}" alt="">
+			<img style="width: 100%;" src="{{if eq .Lang "en"}}{{.IMG_en}}{{else}}{{.IMG_pt}}{{end}}" alt="">
 		</button>
 	</div>
 </header>
