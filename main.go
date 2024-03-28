@@ -77,6 +77,12 @@ func main() {
 			"IsDarkmode": mode == "dark",
 			"Greeting":   textMap[lang]["greeting"],
 			"Title":      textMap[lang]["title"],
+			"Roles": []string{
+				textMap[lang]["role0"],
+				textMap[lang]["role1"],
+				textMap[lang]["role2"],
+				textMap[lang]["role3"],
+			},
 		}
 		return c.Render(http.StatusOK, "index", data)
 	})
