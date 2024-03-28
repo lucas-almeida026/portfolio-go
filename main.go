@@ -66,6 +66,10 @@ func main() {
 	e := echo.New()
 
 	e.Pre(middleware.RemoveTrailingSlash())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"https://almeidadeveloper.com", "http://almeidadeveloper.com"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 	e.Use(middleware.Recover())
 	e.Static("/assets", "/assets")
 	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(
