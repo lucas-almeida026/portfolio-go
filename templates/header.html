@@ -1,20 +1,30 @@
 {{define "header"}}
-<header class="w-full px-2 xs:px-6 py-4
-	flex justify-between
+<header class="w-full px-3 xs:px-6 py-4
+	flex justify-between items-center
 	border-b-2 {{if .IsDarkmode}}border-gray-600{{else}}border-gray-300{{end}}">
 	<div class="flex flex-row justify-start items-center">
-		<img class="w-1/5" src="http://localhost:4488/assets/la-logo.png" alt="la logo" >
+		<img style="max-width: 56px;" class="w-1/5" src="http://localhost:4488/assets/la-logo.png" alt="la logo" >
 		<div class="flex flex-col">
 			<h1 class="text-md tracking-tight italic
-			{{if .IsDarkmode}}text-gray-300{{else}}text-gray-800{{end}}
+			text-gray-{{if .IsDarkmode}}300{{else}}800{{end}}
 			leading-none">
 				Lucas Almeida
 			</h1>
 			<h2 class="text-md text-ad_orange tracking-wide">
-				Software Developer
+				{{.Title}}
 			</h2>
 		</div>
 	</div>
-	<button id="mode-switch">SM</button>
+	<button
+		id="mobile-menu-btn"
+		style="min-width: 30px; height: 30px;"
+		class="flex flex-col justify-evenly items-center
+		border-gray-{{if .IsDarkmode}}300{{else}}800{{end}}
+		cursor-pointer
+		lg:hidden">
+		<div style="min-width: 24px; height: 3px" class="rounded bg-gray-{{if .IsDarkmode}}300{{else}}800{{end}}"></div>
+		<div style="min-width: 24px; height: 3px" class="rounded bg-gray-{{if .IsDarkmode}}300{{else}}800{{end}}"></div>
+		<div style="min-width: 24px; height: 3px" class="rounded bg-gray-{{if .IsDarkmode}}300{{else}}800{{end}}"></div>
+	</button>
 </header>
 {{end}}

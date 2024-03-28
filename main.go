@@ -38,12 +38,7 @@ func newTemplate(templates *template.Template) echo.Renderer {
 
 func main() {
 
-	textMap := make(map[string]map[string]string)
-	textMap["en"] = make(map[string]string)
-	textMap["pt"] = make(map[string]string)
-	textMap["en"]["greeting"] = "Hello, I'm"
-	textMap["en"]["aboutme"] = "!About Me!"
-	textMap["pt"]["greeting"] = "Olá, eu sou"
+	textMap := getTextMap()
 
 	htmxFile, err := fs.ReadFile(os.DirFS("local"), "htmx.js")
 	if err != nil {
@@ -68,11 +63,20 @@ func main() {
 		mode := c.QueryParam("visualmode")
 		lang := c.QueryParam("lang")
 
+		if mode != "dark" && mode != "light" {
+			return c.Redirect(http.StatusFound, "/?visualmode=dark&lang="+lang)
+		}
+
+		if lang != "en" && lang != "pt" {
+			return c.Redirect(http.StatusFound, "/?lang=en&visualmode="+mode)
+		}
+
 		data := map[string]interface{}{
 			"HTMX":       string(htmxFile),
 			"Styles":     string(stylesFile),
 			"IsDarkmode": mode == "dark",
 			"Greeting":   textMap[lang]["greeting"],
+			"Title":      textMap[lang]["title"],
 		}
 		return c.Render(http.StatusOK, "index", data)
 	})

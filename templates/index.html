@@ -7,6 +7,57 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Lucas Almeida Dev</title>
 	<style>{{.Styles}}</style>
+	<style>
+		#menu-overlay {
+			display: none;
+			width: 100vw;
+			height: 100vh;
+			background-color: transparent;
+			position: fixed;
+			top: 0; left: 0;
+			z-index: 999;
+			transition: .3s ease;
+		}
+		#menu-overlay #close-overlay-btn {
+			position: fixed;
+			top: 25px;
+			right: 15px;
+			z-index: 1000;
+			width: 30px;
+			height: 30px;
+			cursor: pointer;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			opacity: 0;
+			transition: .3s ease;
+		}
+		#menu-overlay #close-overlay-btn::after {
+			content: '';
+			position: absolute;
+			display: block;
+			width: 35px;
+			height: 3px;
+			border-radius: 1.25rem;
+			rotate: 45deg;
+			background-color: #ff7809;
+		}
+		#menu-overlay #close-overlay-btn::before {
+			content: '';
+			position: absolute;
+			display: block;
+			width: 35px;
+			height: 3px;
+			border-radius: 1.25rem;
+			rotate: -45deg;
+			background-color: #ff7809;
+		}
+		.fade-in {
+			transition: 1s ease;
+			translate: 0 30px;
+			opacity: .33;
+		}
+	</style>
 	<script>{{.HTMX}}</script>
 	<script>
 		const url = window.location.href
@@ -16,6 +67,10 @@
 		if (!mode) {
 			const savedMode = localStorage.getItem('visualmode')
 			if (savedMode) {
+				if (!['dark', 'light'].includes(savedMode)) {
+					localStorage.setItem('visualmode', 'dark')
+					savedMode = 'dark'
+				}
 				queryParams.set('visualmode', savedMode)
 				window.location.href = '?' + queryParams.toString()
 			} else {
@@ -27,6 +82,10 @@
 		if (!lang) {
 			const savedLang = localStorage.getItem('lang')
 			if (savedLang) {
+				if (!['en', 'pt'].includes(savedLang)) {
+					localStorage.setItem('lang', 'en')
+					savedLang = 'en'
+				}
 				queryParams.set('lang', savedLang)
 				window.location.href = '?' + queryParams.toString()
 			} else {
@@ -40,15 +99,20 @@
 
 <body class="{{if .IsDarkmode}}text-white bg-gray-800{{else}}text-gray-700 bg-gray-100{{end}} leading-none font-mono">
 	{{template "header" .}}
-	<main class="w-full p-2 lg:p-0">
-		<div id="hero" class="">
+	<div id="menu-overlay">
+		<button id="close-overlay-btn"></button>
+	</div>
+	<div id="mobile-menu"></div>
+	<main class="w-full px-4 md:px-2 lg:px-0">
+		<section id="hero" class="">
 			<div class="w-full flex justify-center mt-6">
-				<div id="picture" class="
-				w-3/5
+				<div id="picture"
+				class="w-3/5
 				flex justify-center items-center
 				overflow-hidden
 				border-4 {{if .IsDarkmode}}border-gray-300{{else}}border-gray-700{{end}}
-				rounded-full">
+				rounded-full
+				">
 					<img class="w-full"
 						src="https://media.licdn.com/dms/image/D4D03AQFaIAigbQceXw/profile-displayphoto-shrink_800_800/0/1700399764580?e=1716422400&v=beta&t=bWBPfJJkmuv4OWbPsk89z8ZIQxyh-HHTM36Ulhn_vm8"
 						alt="Lucas Almeida">
@@ -56,38 +120,155 @@
 			</div>
 			<div
 			class="w-full mt-6 px-1
-			flex flex-col space-y-2">
-				<h3 class="text-lg">{{.Greeting}}</h3>
+			flex flex-col">
+				<h3 class="text-lg leading-none">{{.Greeting}}</h3>
 				<h2 class="text-3xl">Lucas Almeida</h2>
 			</div>
 			<!-- <div class="btn">
 				<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" class="opacity-90" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"></path></svg>
 			</div> -->
-		</div>
+		</section>
 	</main>
 </body>
 <script>
-	const modeSwitch = document.getElementById('mode-switch')
-	if (modeSwitch) {
-		modeSwitch.addEventListener('click', () => {
-			const visualMode = queryParams.get('visualmode')
-			if (!visualMode) {
-				localStorage.setItem('visualmode', 'dark')
-				queryParams.set('visualmode', 'dark')
-				window.location.href = '?' + queryParams.toString()
-				return
-			} else if (visualMode === 'dark') {
-				localStorage.setItem('visualmode', 'light')
-				queryParams.set('visualmode', 'light')
-				window.location.href = '?' + queryParams.toString()
+	;(() => {
+		const mobileMenuBtn = document.getElementById('mobile-menu-btn')
+		const menuOverlay = document.getElementById('menu-overlay')
+		const closeOverlayBtn = document.getElementById('close-overlay-btn')
+		if (!mobileMenuBtn) {
+			return console.error('mobile menu not found')
+		}
+		if (!menuOverlay) {
+			return console.error('menu overlay not found')
+		}
+		if (!closeOverlayBtn) {
+			return console.error('close overlay button not found')
+		}
+		let isShowingMobileMenu = false
+		mobileMenuBtn.addEventListener('click', () => {
+			isShowingMobileMenu = !isShowingMobileMenu
+			if (isShowingMobileMenu) {
+				showMenu()
 			} else {
-				localStorage.setItem('visualmode', 'dark')
-				queryParams.set('visualmode', 'dark')
-				window.location.href = '?' + queryParams.toString()
+				hideMenu()
 			}
 		})
-	}
-</script>
+		closeOverlayBtn.addEventListener('click', () => {
+			hideMenu()
+		})
 
+		function hideMenu() {
+			isShowingMobileMenu = false
+			menuOverlay.style.background = 'transparent'
+			closeOverlayBtn.style.opacity = '0'
+			setTimeout(() => {
+				menuOverlay.style.display = 'none';
+			}, 300)
+		}
+		function showMenu() {
+			menuOverlay.style.display = 'flex';
+			setTimeout(() => {
+				menuOverlay.style.background = 'linear-gradient(#00102aba, #00000090)'
+				closeOverlayBtn.style.opacity = '1'
+			}, 10)
+		}
+
+		const toBeAnimated = document.querySelectorAll('.fade-in')
+		if (!toBeAnimated) {
+			return console.error('no elements to be animated')
+		}
+		function throttle(mainFunction, delay) {
+			let timerFlag = null;
+			return (...args) => {
+				if (timerFlag === null) {
+					mainFunction(...args);
+						timerFlag = setTimeout(() => {
+						timerFlag = null;
+					}, delay);
+				}
+			};
+		}
+		const createDetector = (controller) => {
+			let prev = false;
+			return () => {
+				for (const el of toBeAnimated) {
+					const rect = el.getBoundingClientRect()
+					const elTop = rect.top + window.scrollY
+					const elBottom = rect.bottom + window.scrollY
+					const scrollTop = window.scrollY + window.innerHeight - Math.floor(rect.height / 2)
+					const isOnScreen = scrollTop >= elTop && scrollTop <= elBottom + window.innerHeight
+					setTimeout(() => prev = isOnScreen, 40)
+					if (isOnScreen && !prev) {
+						console.log('entered', el, {elTop, elBottom, scrollTop, h: window.innerHeight})
+						controller.entered(el)
+					}
+					if (prev && !isOnScreen) {
+						console.log('left',  el, {elTop, elBottom, scrollTop, h: window.innerHeight})
+						controller.left(el)
+					}
+				}
+			}
+		}
+
+		const createController = () => {
+			const animating = []
+			let timeout;
+			return {
+				entered: (el) => {
+					if (!animating.includes(el)) {
+						animating.push(el)
+						el.style.opacity = '1'
+						el.style.translate = '0 0'
+						timeout = setTimeout(() => animating.splice(animating.indexOf(el), 1), 1000)
+					} else {
+						// clearTimeout(timeout)
+						// isAnimating = true
+						// el.style.opacity = '1'
+						// el.style.translate = '0 40px'
+						// timeout = setTimeout(() => isAnimating = false, 300)
+					}
+				},
+				left: (el) => {
+					if (animating.includes(el)) {
+						animating.push(el)
+						el.style.opacity = '0'
+						el.style.translate = '0 30px'
+						timeout = setTimeout(() => animating.splice(animating.indexOf(el), 1), 1000)
+					} else {
+						// clearTimeout(timeout)
+						// isAnimating = true
+						// el.style.opacity = '0'
+						// el.style.translate = '0 0'
+						// timeout = setTimeout(() => isAnimating = false, 300)
+					}
+				}
+			}
+		}
+
+		const onScreenDetection = createDetector(createController())
+		setTimeout(onScreenDetection, 100)
+		window.addEventListener('scroll', throttle(onScreenDetection, 50))
+	})()
+	// const modeSwitch = document.getElementById('mode-switch')
+	// if (modeSwitch) {
+	// 	modeSwitch.addEventListener('click', () => {
+	// 		const visualMode = queryParams.get('visualmode')
+	// 		if (!visualMode) {
+	// 			localStorage.setItem('visualmode', 'dark')
+	// 			queryParams.set('visualmode', 'dark')
+	// 			window.location.href = '?' + queryParams.toString()
+	// 			return
+	// 		} else if (visualMode === 'dark') {
+	// 			localStorage.setItem('visualmode', 'light')
+	// 			queryParams.set('visualmode', 'light')
+	// 			window.location.href = '?' + queryParams.toString()
+	// 		} else {
+	// 			localStorage.setItem('visualmode', 'dark')
+	// 			queryParams.set('visualmode', 'dark')
+	// 			window.location.href = '?' + queryParams.toString()
+	// 		}
+	// 	})
+	// }
+</script>
 </html>
 {{end}}
