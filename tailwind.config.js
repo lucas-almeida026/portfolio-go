@@ -10,7 +10,8 @@ module.exports = {
 			md: '768px',
 			sm: '640px',
 			xs: '480px',
-			xxs: '300px'
+			xxs: '300px',
+			mn: '0px'
 		},
 		extend: {
 			colors: {

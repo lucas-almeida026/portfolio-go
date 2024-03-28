@@ -1,6 +1,6 @@
 {{define "index"}}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{.Lang}}">
 
 <head>
 	<meta charset="UTF-8">
@@ -144,6 +144,8 @@
 		const mobileMenuBtn = document.getElementById('mobile-menu-btn')
 		const menuOverlay = document.getElementById('menu-overlay')
 		const closeOverlayBtn = document.getElementById('close-overlay-btn')
+		const toggleThemeBtn = document.getElementById('toggle-visualmode-btn')
+		const toggleLangBtn = document.getElementById('toggle-lang-btn')
 		if (!mobileMenuBtn) {
 			return console.error('mobile menu not found')
 		}
@@ -153,6 +155,28 @@
 		if (!closeOverlayBtn) {
 			return console.error('close overlay button not found')
 		}
+		if (!toggleThemeBtn) {
+			return console.error('toggle theme button not found')
+		}
+
+		toggleThemeBtn.addEventListener('click', () => {
+			if (queryParams.get('visualmode') === 'dark') {
+				queryParams.set('visualmode', 'light')
+			} else {
+				queryParams.set('visualmode', 'dark')
+			}
+			window.location.href = '?' + queryParams.toString()
+		})
+
+		toggleLangBtn.addEventListener('click', () => {
+			if (queryParams.get('lang') === 'en') {
+				queryParams.set('lang', 'pt')
+			} else {
+				queryParams.set('lang', 'en')
+			}
+			window.location.href = '?' + queryParams.toString()
+		})
+
 		let isShowingMobileMenu = false
 		mobileMenuBtn.addEventListener('click', () => {
 			isShowingMobileMenu = !isShowingMobileMenu

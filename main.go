@@ -8,6 +8,7 @@ import (
 	"os"
 	"text/template"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"golang.org/x/time/rate"
@@ -39,6 +40,13 @@ func newTemplate(templates *template.Template) echo.Renderer {
 func main() {
 
 	textMap := getTextMap()
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
+
+	// Get environment variable
+	serverURL := os.Getenv("SERVER_URL")
 
 	htmxFile, err := fs.ReadFile(os.DirFS("local"), "htmx.js")
 	if err != nil {
@@ -72,9 +80,11 @@ func main() {
 		}
 
 		data := map[string]interface{}{
+			"ServerURL":  serverURL,
 			"HTMX":       string(htmxFile),
 			"Styles":     string(stylesFile),
 			"IsDarkmode": mode == "dark",
+			"Lang":       lang,
 			"Greeting":   textMap[lang]["greeting"],
 			"Title":      textMap[lang]["title"],
 			"Roles": []string{

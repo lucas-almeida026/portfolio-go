@@ -3,7 +3,7 @@
 	flex justify-between items-center
 	border-b-2 {{if .IsDarkmode}}border-gray-600{{else}}border-gray-300{{end}}">
 	<div class="flex flex-row justify-start items-center">
-		<img style="max-width: 56px;" class="w-1/5" src="http://localhost:4488/assets/la-logo.png" alt="la logo" >
+		<img style="max-width: 56px;" class="w-12" src="{{.ServerURL}}/assets/la-logo.png" alt="la logo" >
 		<div class="flex flex-col">
 			<h1 class="text-md tracking-tight italic
 			text-gray-{{if .IsDarkmode}}300{{else}}800{{end}}
@@ -22,13 +22,18 @@
 		border-gray-{{if .IsDarkmode}}300{{else}}800{{end}}
 		cursor-pointer
 		lg:hidden">
-		<div style="min-width: 24px; height: 3px" class="rounded bg-gray-{{if .IsDarkmode}}300{{else}}800{{end}}"></div>
-		<div style="min-width: 24px; height: 3px" class="rounded bg-gray-{{if .IsDarkmode}}300{{else}}800{{end}}"></div>
-		<div style="min-width: 24px; height: 3px" class="rounded bg-gray-{{if .IsDarkmode}}300{{else}}800{{end}}"></div>
+		<div style="min-width: 24px; height: 3px" class="rounded {{if .IsDarkmode}}bg-gray-300{{else}}bg-gray-800{{end}}"></div>
+		<div style="min-width: 24px; height: 3px" class="rounded {{if .IsDarkmode}}bg-gray-300{{else}}bg-gray-800{{end}}"></div>
+		<div style="min-width: 24px; height: 3px" class="rounded {{if .IsDarkmode}}bg-gray-300{{else}}bg-gray-800{{end}}"></div>
 	</button>
 	<div
-	class="hidden lg:flex flex-row justify-evenly items-center">
-		<button></button>
+	class="mn:hidden lg:flex flex-row justify-evenly items-center space-x-3">
+		<button id="toggle-visualmode-btn" style="width: 40px; height: 40px">
+			<img style="width: 100%;" src="{{.ServerURL}}/assets/{{if .IsDarkmode}}moon{{else}}sun{{end}}.svg" alt="">
+		</button>
+		<button id="toggle-lang-btn" style="width: 40px; height: 40px" class="rounded-full">
+			<img style="width: 100%;" src="{{.ServerURL}}/assets/{{.Lang}}.png" alt="">
+		</button>
 	</div>
 </header>
 {{end}}
