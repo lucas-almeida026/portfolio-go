@@ -40,13 +40,19 @@ func newTemplate(templates *template.Template) echo.Renderer {
 func main() {
 
 	textMap := getTextMap()
+
 	err := godotenv.Load()
 	if err != nil {
 		fmt.Println("Error loading .env file")
 	}
 
 	// Get environment variable
-	serverURL := os.Getenv("SERVER_URL")
+	SERVER_URL := os.Getenv("SERVER_URL")
+	PORT := os.Getenv("PORT")
+
+	if PORT == "" {
+		PORT = "4488"
+	}
 
 	htmxFile, err := fs.ReadFile(os.DirFS("local"), "htmx.js")
 	if err != nil {
@@ -80,7 +86,7 @@ func main() {
 		}
 
 		data := map[string]interface{}{
-			"ServerURL":  serverURL,
+			"ServerURL":  SERVER_URL,
 			"HTMX":       string(htmxFile),
 			"Styles":     string(stylesFile),
 			"IsDarkmode": mode == "dark",
@@ -97,5 +103,5 @@ func main() {
 		return c.Render(http.StatusOK, "index", data)
 	})
 
-	e.Logger.Fatal(e.Start(":4488"))
+	e.Logger.Fatal(e.Start("0.0.0.0:" + PORT))
 }
