@@ -25,3 +25,4 @@ tmp/*
 # Go workspace file
 go.work
 
+_imgs/
