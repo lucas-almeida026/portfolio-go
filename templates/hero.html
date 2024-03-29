@@ -8,8 +8,9 @@
 		rounded-full
 		">
 			<img class="w-full"
-				src="https://media.licdn.com/dms/image/D4D03AQFaIAigbQceXw/profile-displayphoto-shrink_800_800/0/1700399764580?e=1716422400&v=beta&t=bWBPfJJkmuv4OWbPsk89z8ZIQxyh-HHTM36Ulhn_vm8"
-				alt="Lucas Almeida">
+				srcset="{{.IMG_picture25}} 375w, {{.IMG_picture50}} 620w, {{.IMG_picture75}} 1040w, {{.IMG_picture100}} 1440w"
+				sizes="(max-width: 375px) 375px, (max-width: 620px) 620px, (max-width: 1040px) 1040px, (max-width: 1440px) 1440px, 1440px"
+				alt="Lucas Almeida {{if eq .Lang "en"}}Picture{{else}}Foto{{end}}">
 		</div>
 	</div>
 	<div class="w-full

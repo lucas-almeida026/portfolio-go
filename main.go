@@ -53,11 +53,11 @@ func main() {
 	PARSE_IMG := os.Getenv("PARSE_IMG")
 
 	if PARSE_IMG == "1" {
-		bytes, err := os.ReadFile("assets/sun.svg")
+		bytes, err := os.ReadFile("assets/picture-x75.webp")
 		if err != nil {
 			fmt.Println(err)
 		}
-		os.WriteFile("_imgs/_img_orange-sun-svg.txt", []byte(base64.StdEncoding.EncodeToString(bytes)), 0644)
+		os.WriteFile("_imgs/_img_picture-x75-webp.txt", []byte(base64.StdEncoding.EncodeToString(bytes)), 0644)
 	} else {
 		fmt.Println("skipped parse img")
 	}
@@ -127,6 +127,10 @@ func main() {
 			"IMG_sun":        getSunIcon(),
 			"IMG_moon":       getMoonIcon(),
 			"IMG_orange_sun": getOrangeSunIcon(),
+			"IMG_picture100": getMainPicture100(),
+			"IMG_picture75":  getMainPicture75(),
+			"IMG_picture50":  getMainPicture50(),
+			"IMG_picture25":  getMainPicture25(),
 		}
 		return c.Render(http.StatusOK, "index", data)
 	})
