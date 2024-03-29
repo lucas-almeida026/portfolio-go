@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"fmt"
 	"io"
 	"io/fs"
@@ -49,6 +50,17 @@ func main() {
 	// Get environment variable
 	ENV := os.Getenv("ENV")
 	PORT := os.Getenv("PORT")
+	PARSE_IMG := os.Getenv("PARSE_IMG")
+
+	if PARSE_IMG == "1" {
+		bytes, err := os.ReadFile("assets/favicon.ico")
+		if err != nil {
+			fmt.Println(err)
+		}
+		os.WriteFile("_imgs/_img_favicon-ico.txt", []byte(base64.StdEncoding.EncodeToString(bytes)), 0644)
+	} else {
+		fmt.Println("skipped parse img")
+	}
 
 	if PORT == "" {
 		PORT = "4488"
@@ -116,6 +128,14 @@ func main() {
 			"IMG_moon": getMoonIcon(),
 		}
 		return c.Render(http.StatusOK, "index", data)
+	})
+
+	e.GET("/favicon.ico", func(c echo.Context) error {
+		decoded, error := base64.StdEncoding.DecodeString(getFavicon())
+		if error != nil {
+			return c.String(http.StatusInternalServerError, "Error decoding base64")
+		}
+		return c.Blob(http.StatusOK, "image/x-icon", decoded)
 	})
 
 	e.Logger.Fatal(e.Start("0.0.0.0:" + PORT))
