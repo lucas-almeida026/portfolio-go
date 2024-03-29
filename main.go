@@ -47,12 +47,16 @@ func main() {
 	}
 
 	// Get environment variable
-	SERVER_URL := os.Getenv("SERVER_URL")
+	ENV := os.Getenv("ENV")
 	PORT := os.Getenv("PORT")
 
 	if PORT == "" {
 		PORT = "4488"
 	}
+	if ENV == "" {
+		ENV = "prod"
+	}
+	fmt.Println("ENV =", ENV)
 
 	htmxFile, err := fs.ReadFile(os.DirFS("local"), "htmx.js")
 	if err != nil {
@@ -66,15 +70,18 @@ func main() {
 	e := echo.New()
 
 	e.Pre(middleware.RemoveTrailingSlash())
-	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins: []string{"https://almeidadeveloper.com", "http://almeidadeveloper.com"},
-		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
-	}))
+	if ENV == "prod" {
+		e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+			AllowOrigins: []string{"https://almeidadeveloper.com", "http://almeidadeveloper.com"},
+			AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+		}))
+		e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(
+			rate.Limit(20),
+		)))
+	} else {
+		e.Use(middleware.CORS())
+	}
 	e.Use(middleware.Recover())
-	// e.Static("/assets", "/assets")
-	e.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(
-		rate.Limit(20),
-	)))
 
 	NewTemplateRenderer(e, "templates/*.html")
 	e.GET("/", func(c echo.Context) error {
@@ -90,7 +97,6 @@ func main() {
 		}
 
 		data := map[string]interface{}{
-			"ServerURL":  SERVER_URL,
 			"HTMX":       string(htmxFile),
 			"Styles":     string(stylesFile),
 			"IsDarkmode": mode == "dark",
