@@ -21,6 +21,10 @@
 			z-index: 999;
 			transition: .3s ease;
 		}
+		#menu-overlay > div {
+			opacity: 0;
+			transition: .3s ease;
+		}
 		#menu-overlay #close-overlay-btn {
 			position: fixed;
 			top: 25px;
@@ -100,52 +104,47 @@
 	</script>
 </head>
 
-<body class="{{if .IsDarkmode}}text-gray-100 bg-gray-800{{else}}text-gray-700 bg-gray-100{{end}} leading-none font-mono">
+<body
+class="
+{{if .IsDarkmode}}
+	text-gray-100 bg-gray-800
+{{else}}
+	text-gray-700 bg-gray-100
+{{end}}
+leading-none font-mono">
 	{{template "header" .}}
 	<div id="menu-overlay">
 		<button id="close-overlay-btn"></button>
+		<div
+		class="w-full h-full flex flex-col justify-start items-center
+		pt-8 pb-4 px-4">
+			<div
+			class="w-full
+			flex flex-row justify-start pl-4 space-x-3">
+				<button id="toggle-visualmode-btn-mobile" style="width: 40px; height: 40px">
+					<img style="width: 100%;" src="{{if .IsDarkmode}}{{.IMG_moon}}{{else}}{{.IMG_orange_sun}}{{end}}" alt="">
+				</button>
+				<button id="toggle-lang-btn-mobile" style="width: 40px; height: 40px" class="rounded-full">
+					<img style="width: 100%;" src="{{if eq .Lang "en"}}{{.IMG_en}}{{else}}{{.IMG_pt}}{{end}}" alt="">
+				</button>
+			</div>
+		</div>
 	</div>
 	<div id="mobile-menu"></div>
 	<main class="w-full flex flex-col items-center justify-center px-4 md:px-2 lg:px-0">
-		<section id="hero" style="max-width: 375px;" class="w-full flex flex-col space-y-6">
-			<div class="w-full flex justify-center mt-6">
-				<div id="picture"
-				class="w-3/5 mt-6
-				flex justify-center items-center
-				overflow-hidden
-				border-4 {{if .IsDarkmode}}border-gray-300{{else}}border-gray-700{{end}}
-				rounded-full
-				">
-					<img class="w-full"
-						src="https://media.licdn.com/dms/image/D4D03AQFaIAigbQceXw/profile-displayphoto-shrink_800_800/0/1700399764580?e=1716422400&v=beta&t=bWBPfJJkmuv4OWbPsk89z8ZIQxyh-HHTM36Ulhn_vm8"
-						alt="Lucas Almeida">
-				</div>
-			</div>
-			<div
-			class="w-full
-			flex flex-col">
-				<h3 class="text-lg leading-none">{{.Greeting}}</h3>
-				<h2 class="text-3xl">Lucas Almeida</h2>
-			</div>
-			<ul
-			class="list-disc">
-				{{range $val := .Roles}}
-					<li class="text-md leading-5 ml-6">{{$val}}</li>
-				{{end}}
-			</ul>
-			<!-- <div class="btn">
-				<svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 16 16" class="opacity-90" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854V1.146zm4.943 12.248V6.169H2.542v7.225h2.401zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248-.822 0-1.359.54-1.359 1.248 0 .694.521 1.248 1.327 1.248h.016zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016a5.54 5.54 0 0 1 .016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225h2.4z"></path></svg>
-			</div> -->
-		</section>
+		{{template "hero" .}}
 	</main>
 </body>
 <script>
 	;(() => {
 		const mobileMenuBtn = document.getElementById('mobile-menu-btn')
 		const menuOverlay = document.getElementById('menu-overlay')
+		const menuOverlayDivChildren = menuOverlay.querySelectorAll('div')
 		const closeOverlayBtn = document.getElementById('close-overlay-btn')
 		const toggleThemeBtn = document.getElementById('toggle-visualmode-btn')
 		const toggleLangBtn = document.getElementById('toggle-lang-btn')
+		const toggleThemeBtnMobile = document.getElementById('toggle-visualmode-btn-mobile')
+		const toggleLangBtnMobile = document.getElementById('toggle-lang-btn-mobile')
 		if (!mobileMenuBtn) {
 			return console.error('mobile menu not found')
 		}
@@ -159,22 +158,31 @@
 			return console.error('toggle theme button not found')
 		}
 
-		toggleThemeBtn.addEventListener('click', () => {
+		const toggleTheme = () => {
 			if (queryParams.get('visualmode') === 'dark') {
 				queryParams.set('visualmode', 'light')
 			} else {
 				queryParams.set('visualmode', 'dark')
 			}
 			window.location.href = '?' + queryParams.toString()
-		})
-
-		toggleLangBtn.addEventListener('click', () => {
+		}
+		const toggleLang = () => {
 			if (queryParams.get('lang') === 'en') {
 				queryParams.set('lang', 'pt')
 			} else {
 				queryParams.set('lang', 'en')
 			}
 			window.location.href = '?' + queryParams.toString()
+		}
+		toggleThemeBtn.addEventListener('click', toggleTheme)
+		toggleLangBtn.addEventListener('click', toggleLang)
+		toggleThemeBtnMobile.addEventListener('click', () => {
+			toggleTheme()
+			hideMenu()
+		})
+		toggleLangBtnMobile.addEventListener('click', () => {
+			toggleLang()
+			hideMenu()
 		})
 
 		let isShowingMobileMenu = false
@@ -194,6 +202,9 @@
 			isShowingMobileMenu = false
 			menuOverlay.style.background = 'transparent'
 			closeOverlayBtn.style.opacity = '0'
+			for (const el of menuOverlayDivChildren) {
+				el.style.opacity = '0'
+			}
 			setTimeout(() => {
 				mobileMenuBtn.style.opacity = '1'
 			}, 50)
@@ -202,11 +213,14 @@
 			}, 300)
 		}
 		function showMenu() {
-			menuOverlay.style.display = 'flex';
+			menuOverlay.style.display = 'block';
 			mobileMenuBtn.style.opacity = '0'
 			setTimeout(() => {
 				menuOverlay.style.background = mode === 'dark' ? 'linear-gradient(#00102aba, #00000090)' : 'linear-gradient(#00101dd0, #000000c0)'
 				closeOverlayBtn.style.opacity = '1'
+				for (const el of menuOverlayDivChildren) {
+					el.style.opacity = '1'
+				}
 			}, 10)
 		}
 

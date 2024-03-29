@@ -53,11 +53,11 @@ func main() {
 	PARSE_IMG := os.Getenv("PARSE_IMG")
 
 	if PARSE_IMG == "1" {
-		bytes, err := os.ReadFile("assets/favicon.ico")
+		bytes, err := os.ReadFile("assets/sun.svg")
 		if err != nil {
 			fmt.Println(err)
 		}
-		os.WriteFile("_imgs/_img_favicon-ico.txt", []byte(base64.StdEncoding.EncodeToString(bytes)), 0644)
+		os.WriteFile("_imgs/_img_orange-sun-svg.txt", []byte(base64.StdEncoding.EncodeToString(bytes)), 0644)
 	} else {
 		fmt.Println("skipped parse img")
 	}
@@ -121,11 +121,12 @@ func main() {
 				textMap[lang]["role2"],
 				textMap[lang]["role3"],
 			},
-			"IMG_en":   getENIcon(),
-			"IMG_pt":   getPTIcon(),
-			"IMG_logo": getOrangeLogo(),
-			"IMG_sun":  getSunIcon(),
-			"IMG_moon": getMoonIcon(),
+			"IMG_en":         getENIcon(),
+			"IMG_pt":         getPTIcon(),
+			"IMG_logo":       getOrangeLogo(),
+			"IMG_sun":        getSunIcon(),
+			"IMG_moon":       getMoonIcon(),
+			"IMG_orange_sun": getOrangeSunIcon(),
 		}
 		return c.Render(http.StatusOK, "index", data)
 	})
