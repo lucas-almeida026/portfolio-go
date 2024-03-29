@@ -1,8 +1,7 @@
 {{define "hero"}}
-<section id="hero" style="max-width: 375px;" class="w-full flex flex-col space-y-6">
+<section id="hero" style="max-width: 375px;" class="w-full flex flex-col space-y-16">
 	<div class="w-full flex justify-center mt-6">
-		<div id="picture"
-		class="w-3/5 mt-6
+		<div id="picture" class="w-3/5 mt-6
 		flex justify-center items-center
 		overflow-hidden
 		border-4 {{if .IsDarkmode}}border-gray-300{{else}}border-gray-700{{end}}
@@ -13,17 +12,22 @@
 				alt="Lucas Almeida">
 		</div>
 	</div>
-	<div
-	class="w-full
+	<div class="w-full
 	flex flex-col">
 		<h3 class="text-lg leading-none">{{.Greeting}}</h3>
 		<h2 class="text-3xl">Lucas Almeida</h2>
-	</div>
-	<ul
-	class="list-disc">
-		{{range $val := .Roles}}
+		<ul class="list-disc mt-4">
+			{{range $val := .Roles}}
 			<li class="text-md leading-5 ml-6">{{$val}}</li>
-		{{end}}
-	</ul>
+			{{end}}
+		</ul>
+	</div>
+
+	<div>
+		<button class="btn icon capitalize bg-ad_orange text-gray-800 font-bold">
+			<span>get resume</span>
+			<img style="width: 20px; height: 20px;" src="{{.IMG_sun}}" alt="">
+		</button>
+	</div>
 </section>
 {{end}}

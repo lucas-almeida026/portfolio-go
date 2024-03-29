@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#mobile-menu-btn {
+	transition: .2s ease;
+}
+#menu-overlay {
+	display: none;
+	width: 100vw;
+	height: 100vh;
+	background-color: transparent;
+	position: fixed;
+	top: 0; left: 0;
+	z-index: 999;
+	transition: .3s ease;
+}
+#menu-overlay > div {
+	opacity: 0;
+	transition: .3s ease;
+}
+#menu-overlay #close-overlay-btn {
+	position: fixed;
+	top: 25px;
+	right: 22px;
+	z-index: 1000;
+	width: 30px;
+	height: 30px;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+	transition: .3s ease;
+}
+#menu-overlay #close-overlay-btn::after {
+	content: '';
+	position: absolute;
+	display: block;
+	width: 35px;
+	height: 3px;
+	border-radius: 1.25rem;
+	rotate: 45deg;
+	background-color: #ff7809;
+}
+#menu-overlay #close-overlay-btn::before {
+	content: '';
+	position: absolute;
+	display: block;
+	width: 35px;
+	height: 3px;
+	border-radius: 1.25rem;
+	rotate: -45deg;
+	background-color: #ff7809;
+}
+.fade-in {
+	transition: 1s ease;
+	translate: 0 30px;
+	opacity: .33;
+}
+
+@layer components {
+	.btn {
+		@apply px-4 py-2 rounded-md
+	}
+
+	.btn.icon {
+		@apply flex flex-row justify-center items-center space-x-4
+	}
+}

@@ -7,64 +7,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Lucas Almeida Dev</title>
 	<style>{{.Styles}}</style>
-	<style>
-		#mobile-menu-btn {
-			transition: .2s ease;
-		}
-		#menu-overlay {
-			display: none;
-			width: 100vw;
-			height: 100vh;
-			background-color: transparent;
-			position: fixed;
-			top: 0; left: 0;
-			z-index: 999;
-			transition: .3s ease;
-		}
-		#menu-overlay > div {
-			opacity: 0;
-			transition: .3s ease;
-		}
-		#menu-overlay #close-overlay-btn {
-			position: fixed;
-			top: 25px;
-			right: 15px;
-			z-index: 1000;
-			width: 30px;
-			height: 30px;
-			cursor: pointer;
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			opacity: 0;
-			transition: .3s ease;
-		}
-		#menu-overlay #close-overlay-btn::after {
-			content: '';
-			position: absolute;
-			display: block;
-			width: 35px;
-			height: 3px;
-			border-radius: 1.25rem;
-			rotate: 45deg;
-			background-color: #ff7809;
-		}
-		#menu-overlay #close-overlay-btn::before {
-			content: '';
-			position: absolute;
-			display: block;
-			width: 35px;
-			height: 3px;
-			border-radius: 1.25rem;
-			rotate: -45deg;
-			background-color: #ff7809;
-		}
-		.fade-in {
-			transition: 1s ease;
-			translate: 0 30px;
-			opacity: .33;
-		}
-	</style>
 	<script>{{.HTMX}}</script>
 	<script>
 		const url = window.location.href
@@ -120,18 +62,18 @@ leading-none font-mono">
 		pt-8 pb-4 px-4">
 			<div
 			class="w-full
-			flex flex-row justify-start pl-4 space-x-3">
-				<button id="toggle-visualmode-btn-mobile" style="width: 40px; height: 40px">
+			flex flex-col justify-start items-end mt-24 space-y-6">
+				<button id="toggle-visualmode-btn-mobile" style="width: 40px; height: 40px" class="rounded-full shadow-md">
 					<img style="width: 100%;" src="{{if .IsDarkmode}}{{.IMG_moon}}{{else}}{{.IMG_orange_sun}}{{end}}" alt="">
 				</button>
-				<button id="toggle-lang-btn-mobile" style="width: 40px; height: 40px" class="rounded-full">
+				<button id="toggle-lang-btn-mobile" style="width: 40px; height: 40px" class="rounded-full shadow-md">
 					<img style="width: 100%;" src="{{if eq .Lang "en"}}{{.IMG_en}}{{else}}{{.IMG_pt}}{{end}}" alt="">
 				</button>
 			</div>
 		</div>
 	</div>
 	<div id="mobile-menu"></div>
-	<main class="w-full flex flex-col items-center justify-center px-4 md:px-2 lg:px-0">
+	<main class="w-full flex flex-col items-center justify-center px-4 md:px-2 lg:px-0 pt-24">
 		{{template "hero" .}}
 	</main>
 </body>
@@ -216,7 +158,7 @@ leading-none font-mono">
 			menuOverlay.style.display = 'block';
 			mobileMenuBtn.style.opacity = '0'
 			setTimeout(() => {
-				menuOverlay.style.background = mode === 'dark' ? 'linear-gradient(#00102aba, #00000090)' : 'linear-gradient(#00101dd0, #000000c0)'
+				menuOverlay.style.background = mode === 'dark' ? 'linear-gradient(#001020da, #00000090)' : 'linear-gradient(#00101eda, #000000d4)'
 				closeOverlayBtn.style.opacity = '1'
 				for (const el of menuOverlayDivChildren) {
 					el.style.opacity = '1'
